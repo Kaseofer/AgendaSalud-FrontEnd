@@ -1,0 +1,68 @@
+<div class="flex h-screen bg-gray-50">
+  <!-- Sidebar -->
+  <nav class="w-64 bg-white shadow-lg border-r border-gray-200">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center">
+        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+          <i class="fas fa-calendar-alt text-white text-sm"></i>
+        </div>
+        <h1 class="ml-3 text-xl font-bold text-gray-800">AgendaSalud</h1>
+      </div>
+    </div>
+    
+    <div class="py-6">
+      <nav class="space-y-1 px-4">
+        <a 
+          *ngFor="let item of navigationItems" 
+          [routerLink]="item.route"
+          routerLinkActive="bg-blue-100 border-r-4 border-blue-600 text-blue-700"
+          class="group flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-colors duration-200">
+          <i [class]="item.icon" class="mr-3 text-lg w-5"></i>
+          {{ item.label }}
+        </a>
+      </nav>
+    </div>
+    
+    <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-white">
+      <div class="flex items-center mb-3">
+        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+          <span class="text-white text-xs font-medium">{{ getUserInitials() }}</span>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm font-medium text-gray-700">{{ currentUser?.fullName }}</p>
+          <p class="text-xs text-gray-500">{{ getRoleDisplayName() }}</p>
+        </div>
+      </div>
+      <button 
+        (click)="logout()"
+        class="w-full flex items-center px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200">
+        <i class="fas fa-sign-out-alt mr-3 w-5"></i>
+        Cerrar Sesión
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+      <div class="px-6 py-4 flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-semibold text-gray-800">{{ currentPageTitle }}</h2>
+          <p class="text-sm text-gray-600 mt-1">{{ currentPageDescription }}</p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button class="relative p-2 text-gray-400 hover:text-gray-500 transition-colors">
+            <i class="fas fa-bell text-lg"></i>
+            <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="flex-1 p-6 overflow-auto bg-gray-50">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

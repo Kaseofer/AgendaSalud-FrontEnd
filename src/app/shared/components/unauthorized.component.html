@@ -1,0 +1,16 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
+  <div class="max-w-md w-full text-center">
+    <div class="bg-white rounded-lg shadow-xl p-8">
+      <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Acceso No Autorizado</h2>
+      <p class="text-gray-600 mb-6">No tienes permisos para acceder a esta página.</p>
+      <button 
+        (click)="goBack()"
+        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+        Volver al Login
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-patient-history',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <div class="bg-white p-6 rounded-lg shadow-sm border">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">Mi Historial Médico</h2>
+      <p class="text-gray-600 mb-4">Historial de consultas médicas anteriores.</p>
+      
+      <div class="bg-purple-50 border-l-4 border-purple-400 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <i class="fas fa-history text-purple-400"></i>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-purple-700">
+              Componente en desarrollo. Aquí se mostrará tu historial médico completo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+})
+export class PatientHistoryComponent {}
