@@ -1,14 +1,27 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { 
+  Router, 
+  RouterOutlet, 
+  NavigationEnd, 
+  RouterLink,      // <- DIRECTIVA: Convierte elementos en enlaces de navegación SPA
+  RouterLinkActive // <- DIRECTIVA: Agrega clases CSS cuando la ruta está activa
+} from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { UserRole } from '../core/models/auth.model';
 import { filter } from 'rxjs';
 
+
+  // IMPORTS OBLIGATORIOS EN STANDALONE COMPONENTS:
+  // - CommonModule: *ngFor, *ngIf, pipes básicos
+  // - RouterOutlet: <router-outlet> donde se renderizan las rutas hijas
+  // - RouterLink: [routerLink] para navegación SPA
+  // - RouterLinkActive: routerLinkActive para clases CSS dinámicas
+
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css'
 })
@@ -22,14 +35,14 @@ export class MainLayoutComponent implements OnInit {
   currentPageDescription = 'Resumen general del sistema';
 
   ngOnInit() {
-    // Actualizar título basado en la ruta actual
+    // Escuchar cambios de ruta para actualizar títulos
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       this.updatePageTitle(event.url);
     });
     
-    // Actualizar el usuario actual si cambia
+    // Escuchar cambios del usuario autenticado
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
@@ -38,6 +51,8 @@ export class MainLayoutComponent implements OnInit {
   get navigationItems() {
     const role = this.currentUser?.role;
     
+     // RETORNA ARRAY DE OBJETOS para el *ngFor en el template
+    // Cada objeto tiene: label (texto), route (URL), icon (clase CSS)
     switch (role) {
       case UserRole.ADMIN:
         return [
@@ -101,6 +116,7 @@ export class MainLayoutComponent implements OnInit {
   }
 
   updatePageTitle(url: string): void {
+       // DICCIONARIO de títulos por ruta
     const pageTitles: { [key: string]: { title: string; description: string } } = {
       // Admin
       '/admin/dashboard': { title: 'Panel de Administración', description: 'Gestión general del sistema' },

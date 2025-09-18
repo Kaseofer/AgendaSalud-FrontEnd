@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, map, tap, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { User, UserRole, LoginUserDto, AuthData, ApiResponse } from '../models/auth.model';
 
@@ -29,66 +29,14 @@ export class AuthService {
     }
   }
 
-  login(credentials: LoginUserDto): Observable<AuthData> {
+  login(credentials: LoginUserDto): Observable<ApiResponse<AuthData>> {
     console.log('Login con API real:', this.authApiUrl);
-    
-    return this.http.post<ApiResponse<AuthData>>(`${this.authApiUrl}/auth/login`, credentials)
-      .pipe(
-        map(response => {
-          console.log('Respuesta del servidor:', response);
-          
-          if (!response.isSuccess) {
-            throw new Error(response.message || 'Error en el login');
-          }
-          return response.data;
-        }),
-        tap(authData => {
-          console.log('Datos de autenticación recibidos:', authData);
-          
-          localStorage.setItem('token', authData.token);
-          localStorage.setItem('tokenExpiration', authData.expiresAt);
-          
-          const user: User = {
-            userId: authData.userId,
-            email: authData.email,
-            fullName: authData.fullName,
-            role: authData.role
-          };
-          
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-        }),
-        catchError(error => {
-          console.error('Error en login:', error);
-          
-          // Manejar diferentes tipos de errores
-          if (error.status === 401) {
-            return throwError(() => new Error('Credenciales inválidas'));
-          } else if (error.status === 0) {
-            return throwError(() => new Error('Error de conexión. Verifique su internet.'));
-          } else if (error.error?.message) {
-            return throwError(() => new Error(error.error.message));
-          } else {
-            return throwError(() => new Error('Error del servidor. Intente nuevamente.'));
-          }
-        })
-      );
+    return this.http.post<ApiResponse<AuthData>>(`${this.authApiUrl}/auth/login`, credentials);
   }
 
-  validateToken(): Observable<boolean> {
-    const token = this.getToken();
-    if (!token) {
-      return throwError(() => new Error('No hay token'));
-    }
-
-    return this.http.get<ApiResponse<any>>(`${this.authApiUrl}/auth/validate-token`)
-      .pipe(
-        map(response => response.isSuccess),
-        catchError(() => {
-          this.logout();
-          return throwError(() => new Error('Token inválido'));
-        })
-      );
+  // Método público para actualizar el usuario actual
+  updateCurrentUser(user: User): void {
+    this.currentUserSubject.next(user);
   }
 
   logout(): void {
@@ -130,7 +78,6 @@ export class AuthService {
 
     console.log('Redirigiendo usuario con rol:', user.role);
 
-    // Mapear roles del backend a rutas
     switch (user.role) {
       case 'Admin':
         this.router.navigate(['/admin/dashboard']);

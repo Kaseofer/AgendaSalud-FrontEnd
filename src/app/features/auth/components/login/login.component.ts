@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { ApiResponse, AuthData, User } from '../../../../core/models/auth.model';
 
 
 
@@ -17,7 +18,6 @@ import { AuthService } from '../../../../core/services/auth.service';
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
-  private router = inject(Router);
 
   isLoading = false;
   errorMessage = '';
@@ -34,19 +34,43 @@ export class LoginComponent {
       
       const credentials = this.loginForm.value as { email: string; password: string };
       
-      console.log('Enviando credenciales:', { email: credentials.email });
-      
       this.authService.login(credentials).subscribe({
-        next: (authData) => {
-          console.log('Login exitoso:', authData);
-          this.authService.redirectByRole();
+        next: (response: ApiResponse<AuthData>) => {
+          
+          console.log('Respuesta del servidor:', response);
+          
+          if (response.isSuccess) {
+            // Guardar datos del login
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('tokenExpiration', response.data.expiresAt);
+            
+            const user: User = {
+              userId: response.data.userId,
+              email: response.data.email,
+              fullName: response.data.fullName,
+              role: response.data.role
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            this.authService.updateCurrentUser(user);
+            
+            this.authService.redirectByRole();
+          } else {
+            this.errorMessage = response.message || 'Error en el login';
+            this.isLoading = false;
+          }
         },
         error: (error) => {
           console.error('Error en login:', error);
-          this.errorMessage = error.message || 'Error al iniciar sesión. Verifique sus credenciales.';
-          this.isLoading = false;
-        },
-        complete: () => {
+          if (error.status === 401) {
+            this.errorMessage = 'Credenciales inválidas';
+          } else if (error.status === 0) {
+            this.errorMessage = 'Error de conexión. Verifique su internet.';
+          } else if (error.error?.message) {
+            this.errorMessage = error.error.message;
+          } else {
+            this.errorMessage = 'Error del servidor. Intente nuevamente.';
+          }
           this.isLoading = false;
         }
       });

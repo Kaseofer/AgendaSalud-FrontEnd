@@ -48,4 +48,11 @@ export class PatientDashboardComponent implements OnInit {
       default: return 'bg-gray-100 text-gray-700';
     }
   }
+
+  get firstName(): string {
+    if (this.currentUser?.fullName) {
+      return this.currentUser.fullName.split(' ')[0];
+    }
+    return 'Usuario';
+  }
 }
