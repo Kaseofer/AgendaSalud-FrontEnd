@@ -1,14 +1,12 @@
-
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
-
 @Component({
-  selector: 'app-patient-appointments',
+  selector: 'app-appointments',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './appointments.component.html',
   styleUrl: './appointments.component.css'
 })
-export class PatientAppointmentsComponent {
+export class AppointmentsComponent {
+
 }
