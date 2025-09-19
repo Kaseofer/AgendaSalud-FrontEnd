@@ -56,7 +56,7 @@ export const routes: Routes = [
   
   // PÁGINA DE ERROR: Usuario sin permisos
   // Se muestra cuando un guard bloquea el acceso
-  { path: 'unauthorized', loadComponent: () => import('./shared/components/unauthorized.component').then(c => c.UnauthorizedComponent) },
+  { path: 'unauthorized', loadComponent: () => import('./shared/components/unauthorized/unauthorized.component').then(c => c.UnauthorizedComponent) },
   
   // RUTA COMODÍN: Cualquier URL no definida arriba
   // Se ejecuta al final si ninguna ruta anterior coincide
