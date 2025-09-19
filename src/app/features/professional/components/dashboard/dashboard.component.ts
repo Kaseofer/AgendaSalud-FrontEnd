@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-professional-dashboard',
@@ -129,4 +129,10 @@ export class ProfessionalDashboardComponent implements OnInit {
     const now = new Date();
     return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
   }
+
+  getProfessionalName(): string {
+  const fullName = this.currentUser?.fullName;
+  return fullName ? fullName.split(' ').pop() || 'Usuario' : 'Usuario';
+  //                              ^^^^ pop() obtiene el último elemento
+}
 }

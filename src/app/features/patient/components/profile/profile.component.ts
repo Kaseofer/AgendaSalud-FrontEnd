@@ -2,10 +2,14 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-request-appointment',
+  selector: 'app-patient-profile',
   standalone: true,
   imports: [CommonModule],
-  templateUrl:'./request-appointment.component.html',
-  styleUrl: './request-appointment.component.css'
+  templateUrl: './profile.component.html',
+  styleUrl: './profile.component.css'
 })
-export class RequestAppointmentComponent {}
+export class PatientProfileComponent {
+
+}
+
+

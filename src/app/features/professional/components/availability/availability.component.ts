@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-availability',
+  selector: 'app-professional-availability',
   standalone: true,
   imports: [],
   templateUrl: './availability.component.html',

@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-system',
+  selector: 'app-admin-system',
   standalone: true,
   imports: [],
   templateUrl: './system.component.html',
   styleUrl: './system.component.css'
 })
-export class SystemComponent {
+export class AdminSystemComponent {
 
 }

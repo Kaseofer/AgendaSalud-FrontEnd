@@ -37,10 +37,11 @@ export class MainLayoutComponent implements OnInit {
   ngOnInit() {
     // Escuchar cambios de ruta para actualizar títulos
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      this.updatePageTitle(event.url);
-    });
+    filter(event => event instanceof NavigationEnd)
+    ).subscribe((event) => {  // ✅ SIN tipo explícito
+                const navigationEnd = event as NavigationEnd;  // ✅ Type assertion
+                this.updatePageTitle(navigationEnd.url);
+            });
     
     // Escuchar cambios del usuario autenticado
     this.authService.currentUser$.subscribe(user => {

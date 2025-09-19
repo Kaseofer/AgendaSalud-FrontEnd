@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-patients',
+  selector: 'app-professional-patients',
   standalone: true,
   imports: [],
   templateUrl: './schedule.component.html',

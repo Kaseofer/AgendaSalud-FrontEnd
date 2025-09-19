@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-reports',
+  selector: 'app-manager-reports',
   standalone: true,
   imports: [],
   templateUrl: './reports.component.html',

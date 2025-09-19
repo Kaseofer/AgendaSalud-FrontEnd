@@ -1,12 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-schedules',
+  selector: 'app-manager-schedules',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './schedules.component.html',
   styleUrl: './schedules.component.css'
 })
-export class SchedulesComponent {
+export class ManagerSchedulesComponent {
 
 }

@@ -1,80 +1,72 @@
- <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
-      <div class="max-w-md w-full space-y-8">
-        <div class="bg-white rounded-lg shadow-xl p-8">
-          <div class="text-center mb-8">
-            <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <i class="fas fa-calendar-alt text-white text-2xl"></i>
-            </div>
-            <h2 class="text-3xl font-extrabold text-gray-900">AgendaSalud</h2>
-            <p class="mt-2 text-sm text-gray-600">Sistema de Gestión de Turnos</p>
-          </div>
-          
-          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
-            <div>
-              <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-              <input
-                id="email"
-                type="email"
-                formControlName="email"
-                class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="tu@email.com">
-              <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" 
-                   class="text-red-600 text-sm mt-1">
-                Email es requerido y debe ser válido
-              </div>
-            </div>
-            
-            <div>
-              <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-              <input
-                id="password"
-                type="password"
-                formControlName="password"
-                class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="••••••••">
-              <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" 
-                   class="text-red-600 text-sm mt-1">
-                Contraseña es requerida
-              </div>
-            </div>
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo">🏥</div>
+      <h1>AgendaSalud</h1>
+      <p>Sistema de Gestión de Turnos</p>
+    </div>
 
-            <div *ngIf="errorMessage" class="text-red-600 text-sm text-center">
-              {{ errorMessage }}
-            </div>
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- Alert de error -->
+      <div class="error-alert" *ngIf="errorMessage">
+        <span class="error-icon">⚠️</span>
+        <span class="error-message">{{ errorMessage }}</span>
+        <button type="button" class="close-btn" (click)="clearError()">×</button>
+      </div>
 
-            <button
-              type="submit"
-              [disabled]="loginForm.invalid || isLoading"
-              class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50">
-              <span *ngIf="isLoading" class="mr-2">
-                <i class="fas fa-spinner fa-spin"></i>
-              </span>
-              {{ isLoading ? 'Ingresando...' : 'Iniciar Sesión' }}
-            </button>
-
-            <!-- Demo buttons para desarrollo -->
-            <div class="mt-6 pt-4 border-t border-gray-200">
-              <p class="text-center text-sm text-gray-600 mb-4">Usuarios de demostración:</p>
-              <div class="grid grid-cols-2 gap-2">
-                <button type="button" (click)="loginAsDemo('patient@demo.com')"
-                  class="px-3 py-2 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 font-medium">
-                  Paciente
-                </button>
-                <button type="button" (click)="loginAsDemo('professional@demo.com')"
-                  class="px-3 py-2 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 font-medium">
-                  Profesional
-                </button>
-                <button type="button" (click)="loginAsDemo('manager@demo.com')"
-                  class="px-3 py-2 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 font-medium">
-                  Manager
-                </button>
-                <button type="button" (click)="loginAsDemo('admin@demo.com')"
-                  class="px-3 py-2 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 font-medium">
-                  Admin
-                </button>
-              </div>
-            </div>
-          </form>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email"
+          placeholder="tu@email.com"
+          [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+        
+        <!-- Errores de validación del email -->
+        <div class="field-error" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <span *ngIf="loginForm.get('email')?.hasError('required')">El email es requerido</span>
+          <span *ngIf="loginForm.get('email')?.hasError('email')">Ingrese un email válido</span>
         </div>
       </div>
+      
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password"
+          placeholder="••••••••"
+          [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        
+        <!-- Errores de validación de la contraseña -->
+        <div class="field-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <span *ngIf="loginForm.get('password')?.hasError('required')">La contraseña es requerida</span>
+          <span *ngIf="loginForm.get('password')?.hasError('minlength')">Mínimo 6 caracteres</span>
+        </div>
+      </div>
+      
+      <button 
+        type="submit" 
+        class="login-button" 
+        [disabled]="isLoading || loginForm.invalid"
+        [class.loading]="isLoading">
+        <span *ngIf="!isLoading">Iniciar Sesión</span>
+        <span *ngIf="isLoading">
+          <span class="spinner"></span>
+          Cargando...
+        </span>
+      </button>
+    </form>
+
+    <div class="demo-users">
+      <h3>Usuarios de demostración:</h3>
+      <div class="demo-buttons">
+        <button class="demo-btn" (click)="loginAsDemo('paciente@demo.com')">Paciente</button>
+        <button class="demo-btn" (click)="loginAsDemo('profesional@demo.com')">Profesional</button>
+        <button class="demo-btn" (click)="loginAsDemo('manager@demo.com')">Manager</button>
+        <button class="demo-btn" (click)="loginAsDemo('admin@demo.com')">Admin</button>
+      </div>
     </div>
+  </div>
+</div>

@@ -15,7 +15,7 @@ import { ApiResponse, AuthData, User } from '../../../../core/models/auth.model'
   styleUrl: './login.component.css'
 })
 
-export class LoginComponent {
+export class AuthLoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
 
@@ -87,4 +87,7 @@ export class LoginComponent {
       password: 'demo123'
     });
   }
+  clearError(): void {
+  this.errorMessage = '';
+}
 }
